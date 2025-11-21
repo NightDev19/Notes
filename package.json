@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "build:css": "postcss src/css/styles.css -o public/css/styles.css",
+    "watch:css": "postcss src/css/styles.css -o public/css/styles.css --watch"
+  },
+  "type": "module",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
