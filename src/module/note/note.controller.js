@@ -26,7 +26,7 @@ class NoteController {
   deleteNotes(req, res) {
     const note = noteService.deleteNote(req.params.id);
     if (!note) return res.status(404).render("error/404");
-    res.redirect("/notes");
+    res.redirect("/");
   }
 
   showEditForm(req, res) {
