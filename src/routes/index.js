@@ -1,8 +1,11 @@
+// src/module/note/note.route.js
 import { Router } from "express";
-import notesRouter from "../module/note/note.route.js";
+import noteRoutes from "../routes/note/note.configs.js";
 
-const router = Router();
+const notesRouter = Router();
 
-router.use("/notes", notesRouter);
+noteRoutes.forEach((route) => {
+  notesRouter[route.method.toLowerCase()](route.uri, route.handler);
+});
 
-export default router;
+export default notesRouter;

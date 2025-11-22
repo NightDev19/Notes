@@ -1,15 +1,24 @@
 // src/routes/note/note.service.js
+import { pool } from "../../configs/db.config.js";
 class NoteService {
-  constructor() {
-    this.notes = [];
+  async getNotes() {
+    try {
+      const res = await pool.query("SELECT * FROM notes");
+      return res.rows;
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
   }
 
-  getNotes() {
-    return this.notes;
-  }
-
-  getNoteById(id) {
-    return this.notes.find((note) => note.id === parseInt(id));
+  async getNoteById(id) {
+    try {
+      const res = await pool.query("SELECT * FROM notes WHERE id = $1", [id]);
+      return res.rows[0];
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 
   addNote(note) {

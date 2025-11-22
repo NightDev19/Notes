@@ -3,13 +3,17 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "build:css": "postcss src/css/styles.css -o public/css/styles.css",
-    "watch:css": "postcss src/css/styles.css -o public/css/styles.css --watch"
+    "watch:css": "postcss src/css/styles.css -o public/css/styles.css --watch",
+    "seed": "node src/seed/seed.js"
   },
   "type": "module",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "express-ejs-layouts": "^2.5.1"
+    "express-ejs-layouts": "^2.5.1",
+    "pg": "^8.16.3",
+    "pg-pool": "^3.10.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

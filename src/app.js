@@ -24,9 +24,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  const notes = noteService.getNotes() || [];
-  res.render("index", { title: "Home", notes: notes });
+  noteService
+    .getNotes()
+    .then((notes) => res.render("index", { title: "Home", notes }))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Server Error");
+    });
 });
+
 app.use(router);
 
 // 404 handler - must be after all routes

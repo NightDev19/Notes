@@ -2,11 +2,11 @@
 import noteService from "./note.service.js";
 
 class NoteController {
-  showNote(req, res) {
-    const note = noteService.getNoteById(req.params.id);
-    if (!note) return res.status(404).render("error/404");
-    res.render("note", { note });
-  }
+async showNote(req, res) {
+  const note = await noteService.getNoteById(req.params.id);
+  if (!note) return res.status(404).render("error/404");
+  res.render("note", { note });
+}
 
   addNote(req, res) {
     const note = {
