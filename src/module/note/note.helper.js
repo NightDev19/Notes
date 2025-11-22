@@ -1,4 +1,4 @@
-class NoteHelpter {
+class NoteHelper {
   ifExists = (note) => {
     if (!note) {
       return false;
@@ -7,4 +7,4 @@ class NoteHelpter {
   };
 }
 
-export default new NoteHelpter();
+export default new NoteHelper();
