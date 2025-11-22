@@ -1,34 +1,33 @@
-import { pool } from "../configs/db.config.js";
+// src/database/queries.js
+import { pool, useSupabase } from "../configs/db.config.js";
+import supabase from "../configs/supabase.config.js";
 
-async function testConnection() {
+export async function initializeDatabase() {
   try {
+    if (useSupabase) {
+      console.log(
+        "Using Supabase - skipping table creation (manage via Supabase dashboard)"
+      );
+      console.log("DB Connected at:", new Date().toISOString());
+      return;
+    }
+
     await pool.query(`
       CREATE TABLE IF NOT EXISTS notes (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
-        content VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL,
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-    // Insert some dummy data if table is empty
-    const { rowCount } = await pool.query(`SELECT * FROM notes`);
-    if (rowCount === 0) {
-      await pool.query(`
-        INSERT INTO notes (title, content)
-        VALUES
-          ('Note 1', 'This is note 1'),
-          ('Note 2', 'This is note 2')
-      `);
-    }
+    await pool.query(`
+      SELECT setval('notes_id_seq', COALESCE((SELECT MAX(id) FROM notes), 1), true)
+    `);
 
-    const res = await pool.query(`SELECT NOW() AS now`);
-    console.log("DB Connected at:", res.rows[0].now);
+    console.log("DB Connected at:", new Date().toISOString());
   } catch (err) {
-    console.error(err);
-  } finally {
-    pool.end();
+    console.error("Database initialization error:", err);
+    throw err;
   }
 }
-
-testConnection();

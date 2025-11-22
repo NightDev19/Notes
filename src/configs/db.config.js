@@ -1,20 +1,37 @@
+// src/configs/db.config.js
 import pg from "pg";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Skeptical check: are we sure all essential env vars exist?
-["DB_USER", "DB_PASSWORD", "DB_HOST", "DB_NAME", "DB_PORT"].forEach((key) => {
-  if (!process.env[key]) {
-    console.warn(`Missing environment variable: ${key}`);
-  }
-});
-
 const { Pool } = pg;
 
-export const pool = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT),
-});
+let pool;
+let useSupabase = false;
+
+try {
+  pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+  });
+
+  // Test connection
+  await pool.query("SELECT NOW()");
+  console.log("PostgreSQL pool connected");
+} catch (err) {
+  console.warn(
+    "PostgreSQL connection failed, switching to Supabase:",
+    err.message
+  );
+  useSupabase = true;
+  pool = null;
+}
+
+// Helper function to check which DB to use
+const shouldUseSupabase = () => {
+  return useSupabase || !pool;
+};
+
+export { pool, useSupabase, shouldUseSupabase };
